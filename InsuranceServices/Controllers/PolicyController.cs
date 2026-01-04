@@ -81,5 +81,14 @@ namespace InsuranceServices.Controllers
 
             return View(myPolicies);
         }
+
+        public IActionResult Calculator()
+        {
+            // Fetch all schemes from the database
+            var schemes = _context.InsuranceSchemes.ToList();
+
+            // Send them to the View
+            return View(schemes);
+        }
     }
 }

@@ -1,0 +1,85 @@
+﻿@model IEnumerable<InsuranceServices.Models.InsuranceScheme>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h3 class="mb-0"><i class="bi bi-calculator"></i> Premium Estimator</h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Select Your Plan</label>
+                            <select id="planType" class="form-select">
+                                <option value="1.0" data-name="Default">-- Select a Registered Scheme --</option>
+                                @foreach (var scheme in Model)
+                                {
+                                    <option value="1.2" data-type="@scheme.SchemeType">@scheme.SchemeName (@scheme.SchemeType)</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Coverage Amount ($)</label>
+                            <input type="number" id="coverageAmt" class="form-control" placeholder="e.g. 10000">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Policy Term (Years)</label>
+                            <input type="number" id="years" class="form-control" value="1">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Your Age</label>
+                            <input type="number" id="userAge" class="form-control" placeholder="18-65">
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="text-center py-4 bg-light rounded border">
+                        <p class="text-muted text-uppercase small fw-bold mb-1">Estimated Monthly Premium</p>
+                        <h1 class="display-4 text-primary fw-bold" id="resultDisplay">$0.00</h1>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="button" onclick="calculatePremium()" class="btn btn-primary btn-lg shadow-sm">
+                            <i class="bi bi-lightning-charge"></i> Calculate Now
+                        </button>
+                        <a asp-action="BrowseSchemes" class="btn btn-link text-decoration-none">Back to Plans</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function calculatePremium() {
+        const amount = parseFloat(document.getElementById('coverageAmt').value);
+        const years = parseInt(document.getElementById('years').value);
+        const age = parseInt(document.getElementById('userAge').value);
+
+        // Gets the multiplier from the selected plan
+        const planDropdown = document.getElementById('planType');
+        const multiplier = parseFloat(planDropdown.value);
+
+        const display = document.getElementById('resultDisplay');
+
+        if (!amount || amount <= 0 || !years || !age || planDropdown.selectedIndex === 0) {
+            alert("Please select a plan and fill in all fields.");
+            return;
+        }
+
+        // Formula: (Coverage * 0.04) * (Age Factor) * (Plan Multiplier) / 12
+        let baseRate = (amount * 0.04);
+        let ageFactor = (age / 25);
+        let monthly = (baseRate * ageFactor * multiplier) / 12;
+
+        display.innerText = "$" + monthly.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+</script>
