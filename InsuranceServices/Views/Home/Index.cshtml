@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="p-5 mb-4 bg-primary text-white rounded-3 shadow">
+    <div class="container-fluid py-5 text-center">
+        <h1 class="display-4 fw-bold">Secure Your Future Today</h1>
+        <p class="fs-4">Reliable insurance plans for your Life, Health, Vehicle, and Home.</p>
+        <div class="mt-4">
+            <a asp-controller="Account" asp-action="Register" class="btn btn-warning btn-lg px-4 fw-bold">Get Started</a>
+            <a href="#services" class="btn btn-outline-light btn-lg px-4 ms-2">View Schemes</a>
+        </div>
+    </div>
+</div>
+
+<div id="services" class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-primary">Our Insurance Services</h2>
+        <p class="text-muted">Comprehensive coverage tailored to your needs</p>
+    </div>
+
+    <div class="row g-4 text-center">
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <i class="bi bi-heart-pulse-fill text-danger fs-1 mb-3"></i>
+                    <h5 class="card-title fw-bold">Life Insurance</h5>
+                    <p class="card-text small text-muted">Financial protection for your family in any mishap.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <i class="bi bi-hospital-fill text-primary fs-1 mb-3"></i>
+                    <h5 class="card-title fw-bold">Medical Insurance</h5>
+                    <p class="card-text small text-muted">Coverage for hospital fees, doctor visits, and medicines.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <i class="bi bi-car-front-fill text-success fs-1 mb-3"></i>
+                    <h5 class="card-title fw-bold">Motor Insurance</h5>
+                    <p class="card-text small text-muted">Complete protection for your automobiles.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <i class="bi bi-house-heart-fill text-warning fs-1 mb-3"></i>
+                    <h5 class="card-title fw-bold">Home Insurance</h5>
+                    <p class="card-text small text-muted">Safety for your home against accidents or damage.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

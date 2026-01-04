@@ -1,0 +1,54 @@
+﻿@model InsuranceServices.Models.InsuranceScheme
+@{
+    ViewData["Title"] = "Edit Scheme";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="mb-0">Edit Scheme: @Model.SchemeName</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="EditScheme">
+                        <input type="hidden" asp-for="SchemeId" />
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="SchemeName" class="form-label"></label>
+                                <input asp-for="SchemeName" class="form-control" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="SchemeType" class="form-label">Category</label>
+                                <select asp-for="SchemeType" class="form-select">
+                                    <option value="Life">Life Insurance</option>
+                                    <option value="Medical">Medical Insurance</option>
+                                    <option value="Motor">Motor Insurance</option>
+                                    <option value="Home">Home Insurance</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="AmountLimit" class="form-label">Coverage</label>
+                                <input asp-for="AmountLimit" class="form-control" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="TenureYears" class="form-label">Tenure</label>
+                                <input asp-for="TenureYears" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label"></label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="ManageSchemes" class="btn btn-secondary">Back</a>
+                            <button type="submit" class="btn btn-primary px-5">UPDATE SCHEME</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

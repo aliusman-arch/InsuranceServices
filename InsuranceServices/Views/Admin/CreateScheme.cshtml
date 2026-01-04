@@ -1,0 +1,72 @@
+﻿@model InsuranceServices.Models.InsuranceScheme
+@{
+    ViewData["Title"] = "Add New Scheme";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Dashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Add New Scheme</li>
+                </ol>
+            </nav>
+
+            <div class="card shadow border-0">
+                <div class="card-header bg-dark text-white py-3">
+                    <h4 class="mb-0"><i class="bi bi-plus-circle"></i> Define New Insurance Scheme</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="CreateScheme">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="SchemeName" class="form-label">Scheme Name</label>
+                                <input asp-for="SchemeName" class="form-control" placeholder="e.g. Premium Health Gold" />
+                                <span asp-validation-for="SchemeName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="SchemeType" class="form-label">Category</label>
+                                <select asp-for="SchemeType" class="form-select">
+                                    <option value="Life">Life Insurance</option>
+                                    <option value="Medical">Medical Insurance</option>
+                                    <option value="Motor">Motor Insurance</option>
+                                    <option value="Home">Home Insurance</option>
+                                </select>
+                                <span asp-validation-for="SchemeType" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="AmountLimit" class="form-label">Coverage Amount (Max)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="AmountLimit" type="number" class="form-control" />
+                                </div>
+                                <span asp-validation-for="AmountLimit" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="TenureYears" class="form-label">Duration (Years)</label>
+                                <input asp-for="TenureYears" type="number" class="form-control" />
+                                <span asp-validation-for="TenureYears" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Description & Benefits</label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <hr />
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Dashboard" class="btn btn-outline-secondary px-4">Cancel</a>
+                            <button type="submit" class="btn btn-success px-5 fw-bold">SAVE SCHEME</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

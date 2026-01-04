@@ -1,0 +1,44 @@
+﻿@model IEnumerable<InsuranceServices.Models.InsuranceScheme>
+@{
+    ViewData["Title"] = "Available Insurance Plans";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary">Choose Your Protection</h1>
+        <p class="lead text-muted">Select a plan that fits your needs and apply in minutes.</p>
+    </div>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm border-0 transition-hover">
+                    <div class="card-header bg-primary text-white text-center py-3">
+                        <h4 class="mb-0">@item.SchemeType</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-bold">@item.SchemeName</h5>
+                        <p class="card-text text-muted">@item.Description</p>
+                        <hr />
+                        <div class="d-flex justify-content-between px-3">
+                            <span>Cover: <strong>$@item.AmountLimit.ToString("N0")</strong></span>
+                            <span>Tenure: <strong>@item.TenureYears Yrs</strong></span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-0 pb-4">
+                        <a asp-action="Apply" asp-route-id="@item.SchemeId" class="btn btn-outline-primary w-100 fw-bold">APPLY NOW</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .transition-hover:hover {
+        transform: translateY(-5px);
+        transition: 0.3s;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+</style>
