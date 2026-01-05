@@ -1,41 +1,129 @@
 ﻿@model IEnumerable<InsuranceServices.Models.UserPolicy>
+@{
+    ViewData["Title"] = "Request a Loan";
+}
+
+<style>
+    .loan-header {
+        background: linear-gradient(45deg, #2c3e50, #4ca1af);
+        color: white;
+        border-radius: 15px;
+        padding: 40px;
+        margin-bottom: -50px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .loan-form-card {
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        padding-top: 60px;
+    }
+
+    .policy-picker {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.3s;
+    }
+
+        .policy-picker:focus-within {
+            border-color: var(--accent-orange);
+            background-color: #fffaf0;
+        }
+</style>
 
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow border-0">
-                <div class="card-header bg-primary text-white text-center py-3">
-                    <h4 class="mb-0"><i class="bi bi-cash-coin"></i> Apply for a Loan</h4>
+        <div class="col-lg-8">
+            <div class="loan-header shadow-lg text-center">
+                <i class="bi bi-bank2 display-4 text-warning mb-3"></i>
+                <h2 class="fw-bold">Policy Loan Portal</h2>
+                <p class="opacity-75">Borrow against your active insurance funds at low interest rates.</p>
+            </div>
+
+            <div class="card loan-form-card bg-white">
+                <div class="card-body p-4 p-md-5">
+                    @if (!Model.Any())
+                    {
+                        <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill fs-3 me-3"></i>
+                            <div>
+                                <strong>No Eligible Policies!</strong><br>
+                                Loans are only available for <strong>Approved</strong> policies.
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a asp-action="MyPolicies" class="btn btn-outline-primary rounded-pill px-4">Check Policy Status</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <form asp-action="SubmitLoanRequest" method="post">
+                            <div class="row">
+                                <div class="col-12 mb-4">
+                                    <label class="form-label fw-bold text-uppercase small text-muted">1. Select Collateral Policy</label>
+                                    <div class="policy-picker">
+                                        <select name="policyId" class="form-select border-0 fs-5 fw-bold" required>
+                                            @foreach (var p in Model)
+                                            {
+                                                <option value="@p.PolicyId">
+                                                    @p.InsuranceScheme?.SchemeName — [@p.PolicyNumber]
+                                                </option>
+                                            }
+                                        </select>
+                                        <div class="mt-2 small text-muted">
+                                            <i class="bi bi-info-circle me-1"></i>
+                                            You can borrow up to 60% of your policy's Amount Limit.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label fw-bold text-uppercase small text-muted">2. Required Amount ($)</label>
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-text bg-light">$</span>
+                                        <input type="number" name="amount" class="form-control" placeholder="0.00" min="100" required />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label fw-bold text-uppercase small text-muted">3. Purpose of Loan</label>
+                                    <select name="reason" class="form-select form-select-lg" required>
+                                        <option value="Education">Education</option>
+                                        <option value="Medical">Medical Emergency</option>
+                                        <option value="Home Improvement">Home Improvement</option>
+                                        <option value="Business">Business Growth</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-12 mb-4">
+                                    <div class="p-3 bg-light rounded-3 small text-muted">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-shield-check text-success fs-4 me-2"></i>
+                                            <span>By submitting, you agree that this loan is subject to approval by the <strong>InsurePro Risk Department</strong>. Approved funds will be credited within 3-5 business days.</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 d-grid">
+                                    <button type="submit" class="btn btn-primary btn-lg rounded-pill py-3 fw-bold shadow">
+                                        SUBMIT LOAN APPLICATION
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    }
                 </div>
-                <div class="card-body p-4">
-                    <form asp-action="SubmitLoanRequest" method="post">
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Select Policy for Loan</label>
-                            <select name="policyId" class="form-select" required>
-                                @foreach (var p in Model)
-                                {
-                                    <option value="@p.PolicyId">@p.PolicyNumber (@p.InsuranceScheme?.SchemeName)</option>
-                                }
-                            </select>
-                            <small class="text-muted">You can only borrow against approved policies.</small>
-                        </div>
+            </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Loan Amount Requested ($)</label>
-                            <input type="number" name="amount" class="form-control" placeholder="Enter amount" required />
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Reason for Loan</label>
-                            <textarea name="reason" class="form-control" rows="3" placeholder="Explain why you need the loan..." required></textarea>
-                        </div>
-
-                        <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg">Submit Application</button>
-                            <a asp-action="MyPolicies" class="btn btn-link text-muted">Back</a>
-                        </div>
-                    </form>
-                </div>
+            <div class="text-center mt-5">
+                <p class="text-muted small">
+                    Need help with your application? <br>
+                    Contact <strong>support@insurepro.com</strong> or call <strong>1-800-INSURE</strong>
+                </p>
             </div>
         </div>
     </div>

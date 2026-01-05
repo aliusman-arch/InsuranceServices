@@ -1,48 +1,129 @@
 ﻿@model IEnumerable<InsuranceServices.Models.LoanRequest>
+@{
+    ViewData["Title"] = "Loan Review Portal";
+}
 
-<div class="container-fluid py-4">
-    <h2 class="mb-4 text-primary"><i class="bi bi-bank"></i> Loan Applications</h2>
+<style>
+    .loan-table thead {
+        background: #1a2a6c;
+        color: white;
+    }
 
-    <div class="card shadow border-0">
+    .status-badge {
+        width: 100px;
+        padding: 8px;
+        font-weight: 600;
+        border-radius: 50px;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.5px;
+    }
+
+    .amount-display {
+        color: #28a745;
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: 800;
+        font-size: 1.1rem;
+    }
+
+    .reason-text {
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+    }
+
+    .loan-card {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+</style>
+
+<div class="container-fluid py-5 px-lg-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1"><i class="bi bi-bank2 text-primary me-2"></i>Loan Review Center</h2>
+            <p class="text-muted">Manage policy-backed credit requests and evaluate risk levels.</p>
+        </div>
+        <div class="text-end">
+            <span class="badge bg-white text-primary border border-primary px-3 py-2 rounded-pill fw-bold">
+                @Model.Count(l => l.Status == "Pending") PENDING REQUESTS
+            </span>
+        </div>
+    </div>
+
+    <div class="card loan-card overflow-hidden">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-dark">
+            <table class="table table-hover align-middle loan-table mb-0">
+                <thead>
                     <tr>
-                        <th>Customer</th>
-                        <th>Policy</th>
-                        <th>Amount</th>
-                        <th>Reason</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th class="ps-4">Borrower Details</th>
+                        <th>Policy Reference</th>
+                        <th>Requested Amount</th>
+                        <th>Purpose</th>
+                        <th>Submission Date</th>
+                        <th>Approval Status</th>
+                        <th class="text-center">Final Decision</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var loan in Model)
                     {
                         <tr>
-                            <td><strong>@loan.UserPolicy?.User?.FullName</strong></td>
-                            <td>@loan.UserPolicy?.PolicyNumber</td>
-                            <td class="text-success fw-bold">$@loan.RequestAmount</td>
-                            <td><small>@loan.Reason</small></td>
-                            <td>@loan.RequestDate.ToShortDateString()</td>
+                            <td class="ps-4">
+                                <div class="fw-bold">@loan.UserPolicy?.User?.FullName</div>
+                                <div class="small text-muted"><i class="bi bi-envelope me-1"></i>@loan.UserPolicy?.User?.Email</div>
+                            </td>
                             <td>
-                                <span class="badge @(loan.Status == "Pending" ? "bg-warning" : loan.Status == "Approved" ? "bg-success" : "bg-danger")">
-                                    @loan.Status
+                                <span class="badge bg-light text-dark border">
+                                    <i class="bi bi-file-earmark-lock me-1"></i>@loan.UserPolicy?.PolicyNumber
                                 </span>
                             </td>
+                            <td class="amount-display">$@loan.RequestAmount.ToString("N2")</td>
+                            <td>
+                                <span class="reason-text text-muted" title="@loan.Reason">
+                                    <i class="bi bi-chat-left-dots me-1"></i>@loan.Reason
+                                </span>
+                            </td>
+                            <td>@loan.RequestDate.ToString("MMM dd, yyyy")</td>
                             <td>
                                 @if (loan.Status == "Pending")
                                 {
-                                    <form asp-action="ProcessLoan" method="post" class="d-inline">
+                                    <span class="status-badge bg-warning text-dark d-inline-block text-center shadow-sm">
+                                        <i class="bi bi-clock-history me-1"></i>Pending
+                                    </span>
+                                }
+                                else if (loan.Status == "Approved")
+                                {
+                                    <span class="status-badge bg-success text-white d-inline-block text-center">
+                                        <i class="bi bi-check-lg me-1"></i>Approved
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge bg-danger text-white d-inline-block text-center">
+                                        <i class="bi bi-x-circle me-1"></i>Rejected
+                                    </span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (loan.Status == "Pending")
+                                {
+                                    <form asp-action="ProcessLoan" method="post" class="d-flex justify-content-center gap-2">
                                         <input type="hidden" name="id" value="@loan.LoanRequestId" />
-                                        <button name="decision" value="Approve" class="btn btn-sm btn-outline-success">Approve</button>
-                                        <button name="decision" value="Reject" class="btn btn-sm btn-outline-danger">Reject</button>
+                                        <button name="decision" value="Approve" class="btn btn-sm btn-success rounded-pill px-3 fw-bold">
+                                            Approve
+                                        </button>
+                                        <button name="decision" value="Reject" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                            Reject
+                                        </button>
                                     </form>
                                 }
                                 else
                                 {
-                                    <span class="text-muted small">Processed</span>
+                                    <span class="text-muted small fw-bold text-uppercase">Archived</span>
                                 }
                             </td>
                         </tr>

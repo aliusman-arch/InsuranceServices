@@ -3,66 +3,137 @@
     ViewData["Title"] = "Add New Scheme";
 }
 
-<div class="container">
+<style>
+    .form-section-title {
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        color: var(--primary-blue);
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 8px;
+        margin-bottom: 20px;
+    }
+
+    .input-icon-wrap {
+        position: relative;
+    }
+
+        .input-icon-wrap i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #adb5bd;
+        }
+
+        .input-icon-wrap .form-control, .input-icon-wrap .form-select {
+            padding-left: 45px;
+        }
+
+    .card-builder {
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+</style>
+
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a asp-action="Dashboard">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Add New Scheme</li>
+        <div class="col-lg-9">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb bg-transparent p-0">
+                    <li class="breadcrumb-item"><a asp-action="Dashboard" class="text-decoration-none">Admin</a></li>
+                    <li class="breadcrumb-item"><a asp-action="ManageSchemes" class="text-decoration-none">Schemes</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">New Product</li>
                 </ol>
             </nav>
 
-            <div class="card shadow border-0">
-                <div class="card-header bg-dark text-white py-3">
-                    <h4 class="mb-0"><i class="bi bi-plus-circle"></i> Define New Insurance Scheme</h4>
+            <div class="card card-builder overflow-hidden">
+                <div class="card-header bg-white border-0 pt-4 px-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary text-white rounded-3 p-3 me-3">
+                            <i class="bi bi-node-plus fs-3"></i>
+                        </div>
+                        <div>
+                            <h3 class="fw-bold mb-0">Create Insurance Scheme</h3>
+                            <p class="text-muted mb-0">Define the parameters for a new market offering.</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body p-4">
+
+                <div class="card-body p-4 p-md-5">
                     <form asp-action="CreateScheme">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="SchemeName" class="form-label">Scheme Name</label>
-                                <input asp-for="SchemeName" class="form-control" placeholder="e.g. Premium Health Gold" />
-                                <span asp-validation-for="SchemeName" class="text-danger"></span>
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <h6 class="form-section-title fw-bold text-uppercase">1. Identity & Classification</h6>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="SchemeType" class="form-label">Category</label>
-                                <select asp-for="SchemeType" class="form-select">
-                                    <option value="Life">Life Insurance</option>
-                                    <option value="Medical">Medical Insurance</option>
-                                    <option value="Motor">Motor Insurance</option>
-                                    <option value="Home">Home Insurance</option>
-                                </select>
-                                <span asp-validation-for="SchemeType" class="text-danger"></span>
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="AmountLimit" class="form-label">Coverage Amount (Max)</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input asp-for="AmountLimit" type="number" class="form-control" />
+                            <div class="col-md-7 mb-3">
+                                <label asp-for="SchemeName" class="form-label fw-bold small">Official Scheme Name</label>
+                                <div class="input-icon-wrap">
+                                    <i class="bi bi-tag"></i>
+                                    <input asp-for="SchemeName" class="form-control form-control-lg border-2 shadow-sm" placeholder="e.g. Shield Gold Family Plan" />
                                 </div>
-                                <span asp-validation-for="AmountLimit" class="text-danger"></span>
+                                <span asp-validation-for="SchemeName" class="text-danger small"></span>
                             </div>
+
+                            <div class="col-md-5 mb-3">
+                                <label asp-for="SchemeType" class="form-label fw-bold small">Product Category</label>
+                                <div class="input-icon-wrap">
+                                    <i class="bi bi-grid"></i>
+                                    <select asp-for="SchemeType" class="form-select form-select-lg border-2 shadow-sm">
+                                        <option value="" disabled selected>Select Category</option>
+                                        <option value="Life">Life Insurance</option>
+                                        <option value="Medical">Medical Insurance</option>
+                                        <option value="Motor">Motor Insurance</option>
+                                        <option value="Home">Home Insurance</option>
+                                        <option value="Property">Property Insurance</option>
+                                    </select>
+                                </div>
+                                <span asp-validation-for="SchemeType" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <h6 class="form-section-title fw-bold text-uppercase">2. Financial & Time Constraints</h6>
+                            </div>
+
                             <div class="col-md-6 mb-3">
-                                <label asp-for="TenureYears" class="form-label">Duration (Years)</label>
-                                <input asp-for="TenureYears" type="number" class="form-control" />
-                                <span asp-validation-for="TenureYears" class="text-danger"></span>
+                                <label asp-for="AmountLimit" class="form-label fw-bold small">Max Coverage Limit</label>
+                                <div class="input-group input-group-lg shadow-sm">
+                                    <span class="input-group-text bg-light border-2 border-end-0">$</span>
+                                    <input asp-for="AmountLimit" type="number" class="form-control border-2 border-start-0" placeholder="0.00" />
+                                </div>
+                                <span asp-validation-for="AmountLimit" class="text-danger small"></span>
                             </div>
-                        </div>
 
-                        <div class="mb-3">
-                            <label asp-for="Description" class="form-label">Description & Benefits</label>
-                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
-                        </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="TenureYears" class="form-label fw-bold small">Policy Duration (Years)</label>
+                                <div class="input-icon-wrap">
+                                    <i class="bi bi-stopwatch"></i>
+                                    <input asp-for="TenureYears" type="number" class="form-control form-control-lg border-2 shadow-sm" placeholder="e.g. 5" />
+                                </div>
+                                <span asp-validation-for="TenureYears" class="text-danger small"></span>
+                            </div>
 
-                        <hr />
-                        <div class="d-flex justify-content-between">
-                            <a asp-action="Dashboard" class="btn btn-outline-secondary px-4">Cancel</a>
-                            <button type="submit" class="btn btn-success px-5 fw-bold">SAVE SCHEME</button>
+                            <div class="col-12 mt-4">
+                                <h6 class="form-section-title fw-bold text-uppercase">3. Public Details</h6>
+                            </div>
+
+                            <div class="col-12 mb-4">
+                                <label asp-for="Description" class="form-label fw-bold small">Plan Description & Key Benefits</label>
+                                <textarea asp-for="Description" class="form-control border-2 shadow-sm" rows="4" placeholder="Detail what is covered under this specific plan..."></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <div class="d-flex flex-column flex-md-row justify-content-between gap-3 p-4 bg-light rounded-4">
+                                    <a asp-action="ManageSchemes" class="btn btn-outline-secondary rounded-pill px-4 py-2">
+                                        <i class="bi bi-x-circle me-1"></i> Discard Changes
+                                    </a>
+                                    <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 fw-bold shadow">
+                                        <i class="bi bi-cloud-arrow-up me-1"></i> PUBLISH SCHEME
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>

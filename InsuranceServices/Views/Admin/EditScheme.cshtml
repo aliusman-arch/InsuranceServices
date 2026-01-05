@@ -3,48 +3,137 @@
     ViewData["Title"] = "Edit Scheme";
 }
 
-<div class="container py-4">
+<style>
+    .edit-header {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .form-section-label {
+        font-size: 0.8rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: #6c757d;
+        letter-spacing: 1px;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .input-icon-wrap {
+        position: relative;
+    }
+
+        .input-icon-wrap i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #0d6efd;
+        }
+
+        .input-icon-wrap .form-control, .input-icon-wrap .form-select {
+            padding-left: 45px;
+            border-radius: 10px;
+            border: 2px solid #eee;
+        }
+
+            .input-icon-wrap .form-control:focus {
+                border-color: #0d6efd;
+                box-shadow: none;
+            }
+
+    .card-edit {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+</style>
+
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow border-0">
-                <div class="card-header bg-primary text-white py-3">
-                    <h4 class="mb-0">Edit Scheme: @Model.SchemeName</h4>
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <a asp-action="ManageSchemes" class="btn btn-link text-decoration-none p-0 text-muted">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Catalog
+                </a>
+                <span class="badge bg-light text-dark border px-3 py-2 rounded-pill">
+                    Editing Scheme ID: #@Model.SchemeId
+                </span>
+            </div>
+
+            <div class="card card-edit overflow-hidden">
+                <div class="edit-header p-4 d-flex align-items-center">
+                    <div class="bg-white text-primary rounded-circle p-3 me-3">
+                        <i class="bi bi-pencil-square fs-3"></i>
+                    </div>
+                    <div>
+                        <h3 class="fw-bold mb-0">Modify Scheme</h3>
+                        <p class="mb-0 opacity-75">Update the parameters for <strong>@Model.SchemeName</strong></p>
+                    </div>
                 </div>
-                <div class="card-body p-4">
+
+                <div class="card-body p-4 p-md-5">
                     <form asp-action="EditScheme">
                         <input type="hidden" asp-for="SchemeId" />
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="SchemeName" class="form-label"></label>
-                                <input asp-for="SchemeName" class="form-control" />
+
+                        <div class="row g-4">
+                            <div class="col-md-7">
+                                <label class="form-section-label">Scheme Name</label>
+                                <div class="input-icon-wrap">
+                                    <i class="bi bi-tag"></i>
+                                    <input asp-for="SchemeName" class="form-control form-control-lg" />
+                                </div>
+                                <span asp-validation-for="SchemeName" class="text-danger small"></span>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="SchemeType" class="form-label">Category</label>
-                                <select asp-for="SchemeType" class="form-select">
-                                    <option value="Life">Life Insurance</option>
-                                    <option value="Medical">Medical Insurance</option>
-                                    <option value="Motor">Motor Insurance</option>
-                                    <option value="Home">Home Insurance</option>
-                                </select>
+
+                            <div class="col-md-5">
+                                <label class="form-section-label">Category</label>
+                                <div class="input-icon-wrap">
+                                    <i class="bi bi-grid"></i>
+                                    <select asp-for="SchemeType" class="form-select form-select-lg">
+                                        <option value="Life">Life Insurance</option>
+                                        <option value="Medical">Medical Insurance</option>
+                                        <option value="Motor">Motor Insurance</option>
+                                        <option value="Home">Home Insurance</option>
+                                        <option value="Property">Property Insurance</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="AmountLimit" class="form-label">Coverage</label>
-                                <input asp-for="AmountLimit" class="form-control" />
+
+                            <div class="col-md-6">
+                                <label class="form-section-label">Coverage Limit ($)</label>
+                                <div class="input-icon-wrap">
+                                    <i class="bi bi-cash-stack"></i>
+                                    <input asp-for="AmountLimit" class="form-control form-control-lg" />
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="TenureYears" class="form-label">Tenure</label>
-                                <input asp-for="TenureYears" class="form-control" />
+
+                            <div class="col-md-6">
+                                <label class="form-section-label">Tenure (Years)</label>
+                                <div class="input-icon-wrap">
+                                    <i class="bi bi-calendar-check"></i>
+                                    <input asp-for="TenureYears" class="form-control form-control-lg" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="Description" class="form-label"></label>
-                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
-                        </div>
-                        <div class="d-flex justify-content-between mt-4">
-                            <a asp-action="ManageSchemes" class="btn btn-secondary">Back</a>
-                            <button type="submit" class="btn btn-primary px-5">UPDATE SCHEME</button>
+
+                            <div class="col-12">
+                                <label class="form-section-label">Detailed Description</label>
+                                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                            </div>
+
+                            <div class="col-12">
+                                <hr class="my-4 opacity-10">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p class="small text-muted mb-0">
+                                        <i class="bi bi-info-circle me-1"></i>
+                                        Changes will reflect instantly on the user portal.
+                                    </p>
+                                    <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill shadow">
+                                        SAVE CHANGES
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>

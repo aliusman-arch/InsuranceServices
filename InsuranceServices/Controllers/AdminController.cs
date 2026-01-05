@@ -23,8 +23,20 @@ namespace InsuranceServices.Controllers
         public IActionResult Dashboard()
         {
             if (!IsAdmin()) return RedirectToAction("Login", "Account");
-            ViewBag.TotalUsers = _context.Users.Count();
+
+            // Basic Counts
+            ViewBag.TotalUsers = _context.Users.Count(u => u.Role == "PolicyHolder");
             ViewBag.TotalSchemes = _context.InsuranceSchemes.Count();
+
+            // Pending Logic - Counts policies waiting for approval
+            ViewBag.PendingApps = _context.UserPolicies.Count(p => p.Status == "Pending");
+
+            // Loan Logic - Counts loans waiting for decision
+            ViewBag.PendingLoans = _context.LoanRequests.Count(l => l.Status == "Pending");
+
+            // Revenue Logic - Sums up all premium payments
+            ViewBag.TotalRevenue = _context.PremiumPayments.Sum(p => (decimal?)p.AmountPaid) ?? 0;
+
             return View();
         }
 

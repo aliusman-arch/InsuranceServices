@@ -1,53 +1,147 @@
 ﻿@model IEnumerable<InsuranceServices.Models.InsuranceScheme>
+@{
+    ViewData["Title"] = "Premium Estimator";
+}
+
+<style>
+    .calc-card {
+        border-radius: 20px;
+        border: none;
+        overflow: hidden;
+    }
+
+    .calc-input-section {
+        background: #ffffff;
+        padding: 40px;
+    }
+
+    .calc-result-section {
+        background: linear-gradient(135deg, var(--primary-blue), #002244);
+        color: white;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .form-label {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #666;
+        font-weight: 700;
+    }
+
+    .form-control, .form-select {
+        border: 1px solid #e0e0e0;
+        padding: 12px;
+        border-radius: 10px;
+        transition: all 0.3s;
+    }
+
+        .form-control:focus {
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 0 0.25rem rgba(255, 153, 0, 0.1);
+        }
+
+    .result-box {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 30px;
+        border-radius: 20px;
+        margin: 20px 0;
+    }
+
+    .calc-btn {
+        background: var(--accent-orange);
+        border: none;
+        font-weight: 700;
+        padding: 15px;
+        border-radius: 50px;
+        color: white;
+        transition: 0.3s;
+    }
+
+        .calc-btn:hover {
+            background: #e68a00;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(230, 138, 0, 0.4);
+        }
+</style>
 
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow border-0">
-                <div class="card-header bg-primary text-white text-center py-3">
-                    <h3 class="mb-0"><i class="bi bi-calculator"></i> Premium Estimator</h3>
-                </div>
-                <div class="card-body p-4">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Select Your Plan</label>
-                            <select id="planType" class="form-select">
-                                <option value="1.0" data-name="Default">-- Select a Registered Scheme --</option>
-                                @foreach (var scheme in Model)
-                                {
-                                    <option value="1.2" data-type="@scheme.SchemeType">@scheme.SchemeName (@scheme.SchemeType)</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Coverage Amount ($)</label>
-                            <input type="number" id="coverageAmt" class="form-control" placeholder="e.g. 10000">
-                        </div>
+        <div class="col-lg-11">
+            <div class="card calc-card shadow-lg">
+                <div class="row g-0">
+                    <div class="col-md-7 calc-input-section">
+                        <h2 class="fw-bold mb-4" style="color: var(--primary-blue);">Estimate Your Premium</h2>
+                        <p class="text-muted mb-5">Adjust the parameters below to see your personalized insurance cost in real-time.</p>
+
+                        <form id="calcForm">
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label">Select Active Scheme</label>
+                                    <select id="planType" class="form-select form-select-lg shadow-sm">
+                                        <option value="0" data-multiplier="1">-- Select a Protection Plan --</option>
+                                        @foreach (var scheme in Model)
+                                        {
+                                            <option value="@scheme.AmountLimit" data-multiplier="1.2" data-type="@scheme.SchemeType">
+                                                @scheme.SchemeName (@scheme.SchemeType)
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Requested Coverage ($)</label>
+                                    <input type="number" id="coverageAmt" class="form-control" placeholder="Max: 1,000,000">
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Age of Applicant</label>
+                                    <input type="number" id="userAge" class="form-control" placeholder="18-65">
+                                </div>
+
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label">Policy Term (Years)</label>
+                                    <input type="range" class="form-range" min="1" max="30" step="1" id="years" value="5" oninput="this.nextElementSibling.value = this.value">
+                                    <output class="fw-bold text-primary">5</output><span class="text-primary fw-bold"> Years</span>
+                                </div>
+                            </div>
+
+                            <button type="button" onclick="calculatePremium()" class="btn calc-btn w-100 mt-3 text-uppercase">
+                                <i class="bi bi-lightning-charge-fill me-2"></i> Update Estimate
+                            </button>
+                        </form>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Policy Term (Years)</label>
-                            <input type="number" id="years" class="form-control" value="1">
+                    <div class="col-md-5 calc-result-section">
+                        <i class="bi bi-calculator display-1 opacity-25 mb-4"></i>
+                        <h4 class="fw-light">Your Estimated</h4>
+                        <h2 class="fw-bold text-uppercase">Monthly Cost</h2>
+
+                        <div class="result-box">
+                            <h1 class="display-3 fw-bold mb-0" id="resultDisplay">$0.00</h1>
+                            <p class="small opacity-75 mt-2 mb-0" id="calculationNote">Enter details to see pricing</p>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Your Age</label>
-                            <input type="number" id="userAge" class="form-control" placeholder="18-65">
+
+                        <div class="mt-4 text-start">
+                            <div class="d-flex mb-3">
+                                <i class="bi bi-info-circle-fill me-3 text-warning"></i>
+                                <p class="small mb-0">Estimates are based on standard health profiles and current market rates.</p>
+                            </div>
+                            <div class="d-flex">
+                                <i class="bi bi-shield-lock-fill me-3 text-warning"></i>
+                                <p class="small mb-0">Your data is encrypted and used only for calculation purposes.</p>
+                            </div>
                         </div>
-                    </div>
 
-                    <hr />
-
-                    <div class="text-center py-4 bg-light rounded border">
-                        <p class="text-muted text-uppercase small fw-bold mb-1">Estimated Monthly Premium</p>
-                        <h1 class="display-4 text-primary fw-bold" id="resultDisplay">$0.00</h1>
-                    </div>
-
-                    <div class="d-grid gap-2 mt-4">
-                        <button type="button" onclick="calculatePremium()" class="btn btn-primary btn-lg shadow-sm">
-                            <i class="bi bi-lightning-charge"></i> Calculate Now
-                        </button>
-                        <a asp-action="BrowseSchemes" class="btn btn-link text-decoration-none">Back to Plans</a>
+                        <div class="mt-auto pt-5">
+                            <a asp-action="Apply" class="btn btn-outline-light rounded-pill px-4">Apply Now <i class="bi bi-arrow-right"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -60,26 +154,44 @@
         const amount = parseFloat(document.getElementById('coverageAmt').value);
         const years = parseInt(document.getElementById('years').value);
         const age = parseInt(document.getElementById('userAge').value);
-
-        // Gets the multiplier from the selected plan
         const planDropdown = document.getElementById('planType');
-        const multiplier = parseFloat(planDropdown.value);
+        const selectedOption = planDropdown.options[planDropdown.selectedIndex];
 
         const display = document.getElementById('resultDisplay');
+        const note = document.getElementById('calculationNote');
 
-        if (!amount || amount <= 0 || !years || !age || planDropdown.selectedIndex === 0) {
-            alert("Please select a plan and fill in all fields.");
+        if (!amount || amount <= 0 || !age || planDropdown.selectedIndex === 0) {
+            alert("Please fill in all details correctly.");
             return;
         }
 
-        // Formula: (Coverage * 0.04) * (Age Factor) * (Plan Multiplier) / 12
-        let baseRate = (amount * 0.04);
-        let ageFactor = (age / 25);
-        let monthly = (baseRate * ageFactor * multiplier) / 12;
+        // --- Realistic Pricing Logic ---
+        let baseRate = 0.02; // 2% base
+        let riskMultiplier = 1.0;
 
+        // Increase risk for older applicants (Insurance logic)
+        if (age > 45) riskMultiplier = 1.5;
+        if (age > 55) riskMultiplier = 2.0;
+
+        // Plan Type Adjustments
+        const schemeType = selectedOption.getAttribute('data-type');
+        if (schemeType.includes("Life")) riskMultiplier *= 1.3;
+        if (schemeType.includes("Medical")) riskMultiplier *= 1.1;
+
+        // Formula
+        let annualPremium = amount * baseRate * riskMultiplier;
+        let monthly = annualPremium / 12;
+
+        // Update UI
         display.innerText = "$" + monthly.toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
+
+        note.innerText = `Based on a ${years} year ${schemeType} term`;
+
+        // Visual Feedback
+        display.classList.add('animate__animated', 'animate__pulse');
+        setTimeout(() => display.classList.remove('animate__animated', 'animate__pulse'), 500);
     }
 </script>
