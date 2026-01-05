@@ -14,6 +14,7 @@ namespace InsuranceServices.Models.Data
         public DbSet<UserPolicy> UserPolicies { get; set; }
         public DbSet<PremiumPayment> PremiumPayments { get; set; }
         public DbSet<LoanRequest> LoanRequests { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

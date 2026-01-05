@@ -1,45 +1,124 @@
 ﻿@model InsuranceServices.Models.User
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Join InsurePro";
 }
-<div asp-validation-summary="All" class="text-danger"></div>
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow border-0">
-            <div class="card-header bg-primary text-white text-center py-3">
-                <h3>Create Account</h3>
-            </div>
-            <div class="card-body p-4">
-                <form asp-action="Register" asp-controller="Account" method="post">
-                        <div class="mb-3">
-                        <label asp-for="FullName" class="form-label"></label>
-                        <input asp-for="FullName" class="form-control" placeholder="John Doe" />
-                        <span asp-validation-for="FullName" class="text-danger"></span>
-                    </div>
-                    <div class="mb-3">
-                        <label asp-for="Email" class="form-label"></label>
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="Password" class="form-label"></label>
-                            <input asp-for="Password" type="password" class="form-control" />
+
+<style>
+    .register-card {
+        border-radius: 25px;
+        border: none;
+        box-shadow: 0 15px 45px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .register-visual {
+        background: linear-gradient(135deg, var(--primary-blue), #0055aa);
+        color: white;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 12px 15px;
+        border: 1px solid #e0e0e0;
+        transition: all 0.3s;
+    }
+
+        .form-control:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 0.25rem rgba(0, 51, 102, 0.1);
+        }
+
+    .reg-icon {
+        font-size: 1.1rem;
+        color: var(--primary-blue);
+        margin-right: 8px;
+        width: 20px;
+        display: inline-block;
+        text-align: center;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-11 col-xl-10">
+            <div class="card register-card">
+                <div class="row g-0">
+                    <div class="col-md-5 register-visual d-none d-md-flex">
+                        <i class="bi bi-shield-check display-1 mb-4 text-warning"></i>
+                        <h2 class="fw-bold">Secure Your Future</h2>
+                        <p class="opacity-75">Create an account to manage policies, track claims, and access our premium insurance calculator.</p>
+
+                        <div class="mt-4 text-start small">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="bi bi-patch-check-fill text-warning me-3 fs-4"></i>
+                                <span>Verified Security Protocols</span>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="bi bi-lightning-fill text-warning me-3 fs-4"></i>
+                                <span>Instant Policy Approval</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-headset text-warning me-3 fs-4"></i>
+                                <span>24/7 Dedicated Support</span>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="PhoneNumber" class="form-label"></label>
-                            <input asp-for="PhoneNumber" class="form-control" />
+                    </div>
+
+                    <div class="col-md-7 bg-white p-4 p-lg-5">
+                        <div class="d-flex justify-content-between align-items-end mb-4">
+                            <h3 class="fw-bold mb-0">Create Account</h3>
+                            <a asp-action="Login" class="text-primary small fw-bold text-decoration-none">Login instead?</a>
                         </div>
+
+                        <form asp-action="Register" method="post">
+                            @Html.AntiForgeryToken()
+
+                            <div class="mb-3">
+                                <label class="small fw-bold mb-1 text-muted"><i class="bi bi-person reg-icon"></i>Full Name</label>
+                                <input asp-for="FullName" class="form-control" placeholder="John Doe" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="small fw-bold mb-1 text-muted"><i class="bi bi-envelope reg-icon"></i>Email Address</label>
+                                <input asp-for="Email" type="email" class="form-control" placeholder="john@example.com" required />
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="small fw-bold mb-1 text-muted"><i class="bi bi-lock reg-icon"></i>Password</label>
+                                    <input asp-for="Password" type="password" class="form-control" placeholder="••••••••" required />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="small fw-bold mb-1 text-muted"><i class="bi bi-calendar3 reg-icon"></i>Date of Birth</label>
+                                    <input asp-for="DateOfBirth" type="date" class="form-control" required />
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="small fw-bold mb-1 text-muted"><i class="bi bi-telephone reg-icon"></i>Phone Number</label>
+                                <input asp-for="PhoneNumber" class="form-control" placeholder="+1 (555) 000-0000" required />
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="small fw-bold mb-1 text-muted"><i class="bi bi-geo-alt reg-icon"></i>Full Address</label>
+                                <textarea asp-for="Address" class="form-control" rows="2" placeholder="123 Main St, City, Country" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-warning w-100 fw-bold py-3 shadow-sm rounded-pill text-uppercase">
+                                Create My Account
+                            </button>
+                        </form>
+
+                        <p class="text-center text-muted small mt-4">
+                            By registering, you agree to our <a asp-controller="Home" asp-action="Privacy" class="text-primary text-decoration-none">Privacy Policy</a>.
+                        </p>
                     </div>
-                    <div class="mb-3">
-                        <label asp-for="Address" class="form-label"></label>
-                        <textarea asp-for="Address" class="form-control" rows="2"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-warning w-100 fw-bold">REGISTER</button>
-                </form>
-            </div>
-            <div class="card-footer text-center bg-white">
-                <p>Already have an account? <a asp-action="Login">Login here</a></p>
+                </div>
             </div>
         </div>
     </div>

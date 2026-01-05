@@ -1,0 +1,109 @@
+﻿<style>
+    .feedback-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .feedback-card {
+        border-radius: 25px;
+        border: none;
+        background: white;
+        overflow: hidden;
+    }
+
+    .feedback-header {
+        background: linear-gradient(135deg, var(--primary-blue), #0055aa);
+        color: white;
+        padding: 50px 20px;
+        text-align: center;
+    }
+
+    .star-rating {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 20px;
+        border: 1px solid #eee;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--accent-orange);
+        box-shadow: 0 0 0 0.25rem rgba(255, 153, 0, 0.1);
+    }
+
+    .btn-submit-feedback {
+        background: var(--accent-orange);
+        color: white;
+        border: none;
+        padding: 15px;
+        font-weight: 700;
+        border-radius: 50px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s;
+    }
+
+        .btn-submit-feedback:hover {
+            background: #e68a00;
+            transform: scale(1.02);
+            color: white;
+        }
+</style>
+
+<div class="container py-5">
+    <div class="feedback-container">
+        <div class="card feedback-card shadow-lg">
+            <div class="feedback-header">
+                <i class="bi bi-chat-heart display-4 text-warning"></i>
+                <h2 class="fw-bold mt-3">Project Feedback</h2>
+                <p class="opacity-75">Help us build the future of digital insurance</p>
+            </div>
+
+            <div class="card-body p-4 p-md-5">
+                <form asp-action="SubmitFeedback" method="post">
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Identification</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0"><i class="bi bi-person"></i></span>
+                                <input type="text" name="userName" class="form-control border-start-0 ps-0"
+                                       value="@Context.Session.GetString("UserName")" placeholder="Anonymous User" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted text-uppercase">Platform Experience</label>
+                        <div class="star-rating d-flex align-items-center justify-content-between">
+                            <span class="text-dark fw-bold">Overall Rating</span>
+                            <div class="d-flex gap-2">
+                                <select name="rating" class="form-select border-0 bg-transparent fw-bold text-primary" style="width: auto; cursor:pointer;">
+                                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                                    <option value="4">⭐⭐⭐⭐ Good</option>
+                                    <option value="3">⭐⭐⭐ Average</option>
+                                    <option value="2">⭐⭐ Fair</option>
+                                    <option value="1">⭐ Poor</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted text-uppercase">Detailed Suggestions</label>
+                        <textarea name="comments" class="form-control" rows="5"
+                                  placeholder="What did you love? What can we improve?"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-submit-feedback w-100 shadow">
+                        Transmit Feedback <i class="bi bi-send ms-2"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <p class="small text-muted">
+                <i class="bi bi-shield-check me-1"></i> Your feedback is stored securely and helps our dev team.
+            </p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+﻿@model IEnumerable<InsuranceServices.Models.LoanRequest>
+
+<div class="container-fluid py-4">
+    <h2 class="mb-4 text-primary"><i class="bi bi-bank"></i> Loan Applications</h2>
+
+    <div class="card shadow border-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Customer</th>
+                        <th>Policy</th>
+                        <th>Amount</th>
+                        <th>Reason</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var loan in Model)
+                    {
+                        <tr>
+                            <td><strong>@loan.UserPolicy?.User?.FullName</strong></td>
+                            <td>@loan.UserPolicy?.PolicyNumber</td>
+                            <td class="text-success fw-bold">$@loan.RequestAmount</td>
+                            <td><small>@loan.Reason</small></td>
+                            <td>@loan.RequestDate.ToShortDateString()</td>
+                            <td>
+                                <span class="badge @(loan.Status == "Pending" ? "bg-warning" : loan.Status == "Approved" ? "bg-success" : "bg-danger")">
+                                    @loan.Status
+                                </span>
+                            </td>
+                            <td>
+                                @if (loan.Status == "Pending")
+                                {
+                                    <form asp-action="ProcessLoan" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@loan.LoanRequestId" />
+                                        <button name="decision" value="Approve" class="btn btn-sm btn-outline-success">Approve</button>
+                                        <button name="decision" value="Reject" class="btn btn-sm btn-outline-danger">Reject</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">Processed</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

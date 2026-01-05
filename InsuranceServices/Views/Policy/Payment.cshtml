@@ -1,0 +1,58 @@
+﻿@model IEnumerable<InsuranceServices.Models.UserPolicy>
+@{
+    ViewData["Title"] = "Online Premium Payment";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-header bg-dark text-white text-center py-3">
+                    <h4 class="mb-0">Pay Premium Online</h4>
+                </div>
+                <div class="card-body p-4">
+                    @if (!Model.Any())
+                    {
+                        <div class="alert alert-info text-center">
+                            You don't have any <strong>Approved</strong> policies to pay for yet.
+                        </div>
+                    }
+                    else
+                    {
+                        <form asp-action="ProcessPayment" method="post">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Select Policy</label>
+                                <select name="policyId" class="form-select" required>
+                                    @foreach (var p in Model)
+                                    {
+                                        <option value="@p.PolicyId">@p.PolicyNumber - @p.InsuranceScheme?.SchemeName</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Payment Mode</label>
+                                <select name="paymentMode" class="form-select">
+                                    <option value="Credit Card">Credit Card</option>
+                                    <option value="Debit Card">Debit Card</option>
+                                    <option value="Net Banking">Net Banking</option>
+                                    <option value="UPI / Wallet">UPI / Wallet</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Amount to Pay ($)</label>
+                                <input type="number" name="amount" class="form-control" placeholder="0.00" step="0.01" required />
+                            </div>
+
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-success btn-lg">Confirm Payment</button>
+                                <a asp-action="MyPolicies" class="btn btn-link text-muted">Cancel</a>
+                            </div>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

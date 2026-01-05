@@ -1,0 +1,42 @@
+﻿@model IEnumerable<InsuranceServices.Models.UserPolicy>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="mb-0"><i class="bi bi-cash-coin"></i> Apply for a Loan</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="SubmitLoanRequest" method="post">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Select Policy for Loan</label>
+                            <select name="policyId" class="form-select" required>
+                                @foreach (var p in Model)
+                                {
+                                    <option value="@p.PolicyId">@p.PolicyNumber (@p.InsuranceScheme?.SchemeName)</option>
+                                }
+                            </select>
+                            <small class="text-muted">You can only borrow against approved policies.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Loan Amount Requested ($)</label>
+                            <input type="number" name="amount" class="form-control" placeholder="Enter amount" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Reason for Loan</label>
+                            <textarea name="reason" class="form-control" rows="3" placeholder="Explain why you need the loan..." required></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">Submit Application</button>
+                            <a asp-action="MyPolicies" class="btn btn-link text-muted">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,156 +2,132 @@
     ViewData["Title"] = "Privacy Policy";
     var lastUpdated = "January 04, 2026";
 }
-<div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <article class="card shadow-sm">
-                <header class="card-body border-bottom bg-light">
-                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3">
-                        <div>
-                            <h1 class="h3 mb-1" aria-live="polite">@ViewData["Title"]</h1>
-                            <small class="text-muted">Last updated: @lastUpdated</small>
-                        </div>
-                        <div class="ms-md-3">
-                            <a class="btn btn-outline-primary btn-sm" href="#toc" aria-controls="toc">Jump to contents</a>
+
+<style>
+    .privacy-header {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        border-bottom: 5px solid var(--accent-orange);
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .sidebar-sticky {
+        position: sticky;
+        top: 100px;
+    }
+
+    .privacy-section {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        border: 1px solid #eee;
+    }
+
+    .toc-link {
+        color: #666;
+        text-decoration: none;
+        display: block;
+        padding: 8px 15px;
+        border-left: 2px solid transparent;
+        transition: all 0.3s;
+    }
+
+        .toc-link:hover, .toc-link.active {
+            color: var(--primary-blue);
+            border-left-color: var(--accent-orange);
+            background: #f8f9fa;
+        }
+
+    section h3 {
+        color: var(--primary-blue);
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="privacy-header text-center text-md-start d-md-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="display-5 fw-bold text-primary">Privacy Policy</h1>
+            <p class="text-muted mb-0">Commitment to Data Transparency & Security</p>
+            <small class="badge bg-light text-dark border mt-2">Last Updated: @lastUpdated</small>
+        </div>
+        <div class="mt-3 mt-md-0">
+            <button onclick="window.print()" class="btn btn-outline-secondary rounded-pill">
+                <i class="bi bi-printer me-2"></i> Print Policy
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3 d-none d-lg-block">
+            <div class="sidebar-sticky">
+                <h6 class="fw-bold text-uppercase small text-muted mb-3">Contents</h6>
+                <nav id="privacy-nav">
+                    <a href="#summary" class="toc-link">Executive Summary</a>
+                    <a href="#data-collection" class="toc-link">Data Collection</a>
+                    <a href="#usage" class="toc-link">How We Use It</a>
+                    <a href="#cookies" class="toc-link">Cookie Policy</a>
+                    <a href="#rights" class="toc-link">Your Legal Rights</a>
+                    <a href="#contact" class="toc-link">Privacy Office</a>
+                </nav>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+            <div id="summary" class="privacy-section shadow-sm">
+                <h3><i class="bi bi-info-circle me-2"></i> Executive Summary</h3>
+                <p class="lead">At InsurePro, we believe privacy is a fundamental right. This document outlines how we protect your digital footprint while providing top-tier insurance services.</p>
+            </div>
+
+            <div id="data-collection" class="privacy-section shadow-sm">
+                <h3><i class="bi bi-database-add me-2"></i> Information We Collect</h3>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <h6 class="fw-bold">Contact Details</h6>
+                            <p class="small text-muted mb-0">Name, verified email, and encrypted phone records.</p>
                         </div>
                     </div>
-                </header>
-
-                <div class="card-body">
-                    <nav id="toc" class="mb-4" aria-label="Table of contents">
-                        <h2 class="h6 mb-2">Contents</h2>
-                        <ul class="list-group list-group-horizontal flex-wrap" role="list">
-                            <li class="list-group-item p-1 border-0"><a href="#summary" class="link-primary">Summary</a></li>
-                            <li class="list-group-item p-1 border-0"><a href="#data-we-collect" class="link-primary">Data we collect</a></li>
-                            <li class="list-group-item p-1 border-0"><a href="#how-we-use" class="link-primary">How we use it</a></li>
-                            <li class="list-group-item p-1 border-0"><a href="#cookies" class="link-primary">Cookies</a></li>
-                            <li class="list-group-item p-1 border-0"><a href="#retention" class="link-primary">Retention</a></li>
-                            <li class="list-group-item p-1 border-0"><a href="#your-rights" class="link-primary">Your rights</a></li>
-                            <li class="list-group-item p-1 border-0"><a href="#contact" class="link-primary">Contact</a></li>
-                        </ul>
-                    </nav>
-
-                    <section id="summary" class="mb-4">
-                        <h3 class="h5">Summary</h3>
-                        <p class="mb-0">
-                            This page explains what personal information we collect, why we collect it, and how you can manage your information.
-                            It’s written plainly and organized so you can quickly find what matters to you.
-                        </p>
-                    </section>
-
-                    <hr />
-
-                    <section id="data-we-collect" class="mb-4">
-                        <h3 class="h5">Information we collect</h3>
-                        <p class="mb-2">We collect only what is necessary to provide and improve our services:</p>
-                        <ul>
-                            <li><strong>Contact details:</strong> name, email, phone (when you provide them).</li>
-                            <li><strong>Service usage:</strong> pages visited, form submissions, error logs.</li>
-                            <li><strong>Payment &amp; billing:</strong> only when required for a purchase (stored securely).</li>
-                        </ul>
-                        <details>
-                            <summary class="mt-2">Examples of technical data we collect</summary>
-                            <p class="mb-0">IP address, browser type, device identifiers and cookies to ensure the site works correctly and securely.</p>
-                        </details>
-                    </section>
-
-                    <section id="how-we-use" class="mb-4">
-                        <h3 class="h5">How we use your information</h3>
-                        <ul>
-                            <li>To provide and personalize services you request.</li>
-                            <li>To respond to inquiries and customer support requests.</li>
-                            <li>To analyze and improve site functionality and security.</li>
-                        </ul>
-                    </section>
-
-                    <section id="cookies" class="mb-4">
-                        <h3 class="h5">Cookies and tracking</h3>
-                        <p>
-                            We use cookies for essential site functionality and to understand usage. You can control cookies via your browser settings.
-                        </p>
-                        <div class="alert alert-secondary p-2" role="note">
-                            Tip: Most browsers let you clear cookies and block third-party cookies without affecting essential site features.
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <h6 class="fw-bold">Usage Data</h6>
+                            <p class="small text-muted mb-0">IP logs, browser metadata, and session activity.</p>
                         </div>
-                    </section>
-
-                    <section id="retention" class="mb-4">
-                        <h3 class="h5">Data retention</h3>
-                        <p>We retain personal data only as long as needed for the purposes described or to comply with legal obligations.</p>
-                    </section>
-
-                    <section id="your-rights" class="mb-4">
-                        <h3 class="h5">Your choices and rights</h3>
-                        <ol>
-                            <li>Request access to the personal data we hold about you.</li>
-                            <li>Ask for corrections or deletion of inaccurate or unnecessary data.</li>
-                            <li>Opt out of non-essential communications at any time.</li>
-                        </ol>
-                        <details>
-                            <summary>How to make a request</summary>
-                            <p class="mb-0">Send an email to the contact below with a clear description of the request. We'll respond as required by applicable law.</p>
-                        </details>
-                    </section>
-
-                    <section id="contact" class="mb-0">
-                        <h3 class="h5">Contact us</h3>
-                        <p class="mb-1">If you have privacy questions or requests:</p>
-                        <address>
-                            <strong>Email:</strong> <a href="mailto:privacy@example.com">privacy@example.com</a><br />
-                            <strong>Phone:</strong> <a href="tel:+11234567890">+1 (123) 456-7890</a>
-                        </address>
-                    </section>
+                    </div>
                 </div>
-            </article>
+                <details class="mt-3">
+                    <summary class="text-primary fw-bold cursor-pointer">View Technical Collection List</summary>
+                    <p class="mt-2 small text-muted">We utilize AES-256 encryption for all PII (Personally Identifiable Information) stored in our cloud gateways.</p>
+                </details>
+            </div>
 
-            <div class="d-flex justify-content-between align-items-center mt-3">
-                <small class="text-muted">We value your privacy. This summary is not a contract.</small>
-                <div>
-                    <a class="btn btn-outline-secondary btn-sm me-2" href="javascript:window.print()" aria-label="Print privacy policy">Print</a>
-                    <a class="btn btn-primary btn-sm" href="mailto:privacy@example.com?subject=Privacy%20Policy%20Inquiry" aria-label="Contact privacy team">Contact privacy team</a>
+            <div id="usage" class="privacy-section shadow-sm">
+                <h3><i class="bi bi-cpu me-2"></i> Data Utilization</h3>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Personalizing coverage recommendations.</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Automated premium calculation logic.</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Fraud prevention and security monitoring.</li>
+                </ul>
+            </div>
+
+            <div id="contact" class="privacy-section shadow-sm bg-primary text-white">
+                <h3 class="text-white">Privacy Office</h3>
+                <p class="opacity-75">Direct all inquiries regarding the GDPR/CCPA compliance to our legal team.</p>
+                <div class="d-flex gap-4 mt-4">
+                    <div>
+                        <h6 class="fw-bold mb-1">Email</h6>
+                        <a href="mailto:privacy@insurepro.com" class="text-warning text-decoration-none">privacy@insurepro.com</a>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Response Time</h6>
+                        <span>24 - 48 Hours</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-   
-        .list-group-horizontal {
-            flex-direction: row;
-            flex-wrap: wrap;
-        }
-    }
-    /* Back-to-top button */
-    .back-to-top {
-        position: fixed;
-        right: 1rem;
-        bottom: 1.25rem;
-        z-index: 999;
-        display: none;
-    }
-</style>
-
-<button class="btn btn-primary btn-sm back-to-top" id="backToTop" aria-label="Back to top">↑</button>
-
-<script>
-    (function () {
-        // Back-to-top visibility & smooth scroll
-        var btn = document.getElementById('backToTop');
-        window.addEventListener('scroll', function () {
-            if (window.scrollY > 300) btn.style.display = 'block';
-            else btn.style.display = 'none';
-        });
-        btn.addEventListener('click', function () {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            btn.blur();
-        });
-
-        // Add small focus outline for keyboard users on anchors
-        var anchors = document.querySelectorAll('a');
-        anchors.forEach(function (a) {
-            a.addEventListener('focus', function () { a.classList.add('focus-visible'); });
-            a.addEventListener('blur', function () { a.classList.remove('focus-visible'); });
-        });
-    })();
-</script>

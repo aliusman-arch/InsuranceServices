@@ -3,6 +3,7 @@ using InsuranceServices.Models;
 using InsuranceServices.Models.Data;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
+using System;
 
 namespace InsuranceServices.Controllers
 {
@@ -15,17 +16,16 @@ namespace InsuranceServices.Controllers
             _context = context;
         }
 
-        // Registration Page (Empty View)
         public IActionResult Register() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Register(User user)
         {
-            // FORCE removal of validation for fields not in your form
+            // Remove validation for fields handled by logic, not the user
             ModelState.Remove("Role");
-            ModelState.Remove("DateOfBirth");
-            ModelState.Remove("UserPolicies");
+            ModelState.Remove("CreatedAt");
+            ModelState.Remove("ContactNumber"); // We map this manually below
 
             if (ModelState.IsValid)
             {
@@ -35,8 +35,18 @@ namespace InsuranceServices.Controllers
                     return View(user);
                 }
 
+                // FIX: Sync both phone fields so neither is NULL
+                user.ContactNumber = user.PhoneNumber;
+
+                // Set Metadata
                 user.Role = "PolicyHolder";
                 user.CreatedAt = DateTime.Now;
+
+                // Safety check: If DOB is null, provide a default (e.g., 18 years ago)
+                if (user.DateOfBirth == null)
+                {
+                    user.DateOfBirth = DateTime.Now.AddYears(-18);
+                }
 
                 _context.Users.Add(user);
                 _context.SaveChanges();
@@ -45,7 +55,6 @@ namespace InsuranceServices.Controllers
             return View(user);
         }
 
-        // Login Page (Empty View)
         public IActionResult Login() => View();
 
         [HttpPost]
@@ -54,7 +63,6 @@ namespace InsuranceServices.Controllers
             var user = _context.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
             if (user != null)
             {
-                // Set Session Data
                 HttpContext.Session.SetString("UserName", user.FullName);
                 HttpContext.Session.SetInt32("UserId", user.UserId);
                 HttpContext.Session.SetString("UserRole", user.Role ?? "PolicyHolder");

@@ -1,31 +1,87 @@
 ﻿@{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Secure Login";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-4">
-        <div class="card shadow border-0 mt-5">
-            <div class="card-body p-5">
-                <div class="text-center mb-4">
-                    <i class="bi bi-shield-lock-fill text-primary" style="font-size: 3rem;"></i>
-                    <h2 class="mt-2">Welcome Back</h2>
-                </div>
+<style>
+    .login-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
+    .login-card {
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0 20px 60px rgba(0, 51, 102, 0.15);
+        overflow: hidden;
+        background: white;
+    }
+
+    .login-header {
+        background: var(--primary-blue);
+        padding: 40px 20px;
+        color: white;
+        text-align: center;
+    }
+
+    .form-floating > .form-control:focus {
+        border-color: var(--accent-orange);
+        box-shadow: 0 0 0 0.25rem rgba(255, 153, 0, 0.1);
+    }
+
+    .btn-login {
+        background: var(--primary-blue);
+        color: white;
+        font-weight: 700;
+        padding: 12px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+        .btn-login:hover {
+            background: #002244;
+            transform: translateY(-2px);
+        }
+</style>
+
+<div class="container login-container">
+    <div class="col-md-5 col-lg-4">
+        <div class="card login-card">
+            <div class="login-header">
+                <i class="bi bi-shield-lock-fill display-4 text-warning"></i>
+                <h3 class="mt-3 fw-bold">Client Portal</h3>
+                <p class="small opacity-75">Secure access to your insurance portfolio</p>
+            </div>
+
+            <div class="card-body p-4 p-lg-5">
                 @if (ViewBag.Error != null)
                 {
-                    <div class="alert alert-danger">@ViewBag.Error</div>
+                    <div class="alert alert-danger border-0 small shadow-sm">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> @ViewBag.Error
+                    </div>
                 }
 
                 <form asp-action="Login" method="post">
-                    <div class="mb-3">
-                        <label class="form-label">Email Address</label>
-                        <input name="email" type="email" class="form-control" required />
+                    <div class="form-floating mb-3">
+                        <input name="email" type="email" class="form-control" id="emailInput" placeholder="name@example.com" required>
+                        <label for="emailInput">Email Address</label>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <input name="password" type="password" class="form-control" required />
+
+                    <div class="form-floating mb-4">
+                        <input name="password" type="password" class="form-control" id="passInput" placeholder="Password" required>
+                        <label for="passInput">Password</label>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100 py-2">LOGIN</button>
+
+                    <button type="submit" class="btn btn-login w-100 shadow-sm mb-3">
+                        SIGN IN <i class="bi bi-box-arrow-in-right ms-2"></i>
+                    </button>
+
+                    <div class="text-center">
+                        <p class="small text-muted mb-0">Don't have an account?</p>
+                        <a asp-action="Register" class="text-primary fw-bold text-decoration-none small">Create an account today</a>
+                    </div>
                 </form>
             </div>
         </div>

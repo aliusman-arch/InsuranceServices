@@ -1,27 +1,174 @@
 ﻿@{
-    ViewData["Title"] = "Strategies & Schemes";
+    ViewData["Title"] = "Strategic Vision";
 }
 
-<div class="container">
-    <h2 class="text-primary fw-bold mb-4 border-bottom pb-2">Company Strategies & Subsidiary Schemes</h2>
+<style>
+    /* Strategy Header */
+    .strategy-banner {
+        background: linear-gradient(45deg, var(--primary-blue), #0055aa);
+        border-radius: 20px;
+        padding: 60px 40px;
+        color: white;
+        margin-bottom: 40px;
+        box-shadow: 0 10px 30px rgba(0, 51, 102, 0.15);
+        position: relative;
+        overflow: hidden;
+    }
 
-    <div class="row">
-        <div class="col-md-8">
-            <div class="mb-4">
-                <h4>Strategic Goals 2024</h4>
-                <p>Our primary strategy is to modernize insurance through digital-first solutions, ensuring that every policyholder has 24/7 access to their claims and premium details.</p>
+    /* Modernizing the Strategic Goals as a Roadmap */
+    .goal-item {
+        border-left: 3px solid var(--accent-orange);
+        padding-left: 25px;
+        margin-bottom: 30px;
+        position: relative;
+    }
+
+        .goal-item::before {
+            content: '';
+            position: absolute;
+            left: -9px;
+            top: 0;
+            width: 15px;
+            height: 15px;
+            background: var(--accent-orange);
+            border-radius: 50%;
+        }
+
+    /* Subsidiary Benefit Card */
+    .benefit-card {
+        background: #fff;
+        border: 2px dashed #dee2e6;
+        border-radius: 15px;
+        transition: var(--transition);
+        position: relative;
+    }
+
+        .benefit-card:hover {
+            border-color: var(--accent-orange);
+            background-color: #fffaf0;
+        }
+
+    .discount-badge {
+        background: var(--accent-orange);
+        color: white;
+        font-weight: 800;
+        padding: 10px 20px;
+        border-radius: 10px;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+
+    /* Sidebar News styling */
+    .news-card {
+        background: white;
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .news-header {
+        background: #f8f9fa;
+        border-bottom: 1px solid #eee;
+        padding: 15px;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .pulse {
+        height: 10px;
+        width: 10px;
+        background-color: #ff4444;
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 0 rgba(255, 68, 68, 0.4);
+        animation: pulse-animation 2s infinite;
+        margin-right: 5px;
+    }
+
+    @@keyframes pulse-animation {
+        0% {
+            box-shadow: 0 0 0 0px rgba(255, 68, 68, 0.4);
+        }
+
+        70% {
+            box-shadow: 0 0 0 10px rgba(255, 68, 68, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0px rgba(255, 68, 68, 0);
+        }
+    }
+</style>
+
+<div class="container py-4">
+    <div class="strategy-banner">
+        <div class="row align-items-center">
+            <div class="col-md-7">
+                <h1 class="display-5 fw-bold mb-3">Company Strategies</h1>
+                <p class="lead opacity-75">Redefining the insurance landscape through digital excellence and customer-centric growth.</p>
             </div>
-
-            <div class="card bg-light border-0 p-4 mb-4">
-                <h5>Subsidiary Benefit Program</h5>
-                <p>Policyholders who maintain an active Life and Medical plan simultaneously qualify for a 10% discount on Home Insurance premiums.</p>
+            <div class="col-md-5 text-center d-none d-md-block">
+                <i class="bi bi-graph-up-arrow" style="font-size: 8rem; opacity: 0.2;"></i>
             </div>
         </div>
+    </div>
 
-        <div class="col-md-4">
-            <div class="alert alert-info shadow-sm">
-                <h5 class="alert-heading fw-bold"><i class="bi bi-megaphone"></i> News Update</h5>
-                <p>New motor insurance regulations now include electric vehicle (EV) specific coverage at reduced rates!</p>
+    <div class="row g-5">
+        <div class="col-lg-8">
+            <section class="mb-5">
+                <h3 class="fw-bold mb-4 text-primary d-flex align-items-center">
+                    <i class="bi bi-bullseye me-2"></i> Strategic Goals 2026
+                </h3>
+
+                <div class="goal-item">
+                    <h5 class="fw-bold">Modernization & Digitalization</h5>
+                    <p class="text-muted">Deploying <strong>digital-first solutions</strong> to ensure 24/7 access. Our focus is a frictionless experience from policy purchase to claim settlement.</p>
+                </div>
+
+                <div class="goal-item">
+                    <h5 class="fw-bold">Risk Management Excellence</h5>
+                    <p class="text-muted">Utilizing AI-driven data analytics to provide more accurate premiums and faster risk assessment for our clients.</p>
+                </div>
+            </section>
+
+            <section>
+                <h3 class="fw-bold mb-4 text-primary d-flex align-items-center">
+                    <i class="bi bi-gift me-2"></i> Member Benefits
+                </h3>
+                <div class="benefit-card p-4 shadow-sm">
+                    <div class="discount-badge">SAVE 10%</div>
+                    <h5 class="fw-bold">Subsidiary Benefit Program</h5>
+                    <p class="text-muted">Unlock exclusive savings. Maintain an active <strong>Life</strong> and <strong>Medical</strong> plan simultaneously to qualify for an automatic discount on Home Insurance premiums.</p>
+                    <a asp-controller="Policy" asp-action="BrowseSchemes" class="btn btn-sm btn-outline-primary fw-bold mt-2">Explore Plans &rarr;</a>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="news-card">
+                <div class="news-header">
+                    <h6 class="mb-0 fw-bold d-flex align-items-center">
+                        <span class="pulse"></span> LIVE UPDATES
+                    </h6>
+                </div>
+                <div class="p-4">
+                    <div class="mb-4 pb-3 border-bottom">
+                        <span class="badge bg-success-subtle text-success mb-2">New Release</span>
+                        <h6 class="fw-bold">Electric Vehicle Coverage</h6>
+                        <p class="small text-muted mb-0">New motor insurance regulations now include EV-specific coverage at reduced rates!</p>
+                    </div>
+
+                    <div class="mb-0">
+                        <span class="badge bg-warning-subtle text-warning mb-2">Expansion</span>
+                        <h6 class="fw-bold">Nationwide Support</h6>
+                        <p class="small text-muted mb-0">We have opened 5 new digital hubs to support rapid claim processing.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 p-4 rounded-4 text-white" style="background: var(--primary-blue);">
+                <h5 class="fw-bold">Need Help?</h5>
+                <p class="small opacity-75">Our strategists are available for a free consultation on your portfolio.</p>
+                <a href="mailto:help@insurepro.com" class="btn btn-warning btn-sm w-100 fw-bold">Contact Support</a>
             </div>
         </div>
     </div>

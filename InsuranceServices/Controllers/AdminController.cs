@@ -4,6 +4,7 @@ using InsuranceServices.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
+using System;
 
 namespace InsuranceServices.Controllers
 {
@@ -16,6 +17,7 @@ namespace InsuranceServices.Controllers
             _context = context;
         }
 
+        // Helper to check if the current user is an Admin
         private bool IsAdmin() => HttpContext.Session.GetString("UserRole") == "Admin";
 
         public IActionResult Dashboard()
@@ -33,7 +35,72 @@ namespace InsuranceServices.Controllers
             return View(schemes);
         }
 
-        // --- NEW: VIEW ALL USER APPLICATIONS ---
+        // ==========================================
+        // CREATE SCHEME
+        // ==========================================
+        public IActionResult CreateScheme()
+        {
+            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateScheme(InsuranceScheme scheme)
+        {
+            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (ModelState.IsValid)
+            {
+                _context.InsuranceSchemes.Add(scheme);
+                _context.SaveChanges();
+                return RedirectToAction("ManageSchemes");
+            }
+            return View(scheme);
+        }
+
+        // ==========================================
+        // EDIT SCHEME
+        // ==========================================
+        public IActionResult EditScheme(int id)
+        {
+            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            var scheme = _context.InsuranceSchemes.Find(id);
+            if (scheme == null) return NotFound();
+            return View(scheme);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditScheme(InsuranceScheme scheme)
+        {
+            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (ModelState.IsValid)
+            {
+                _context.Update(scheme);
+                _context.SaveChanges();
+                return RedirectToAction("ManageSchemes");
+            }
+            return View(scheme);
+        }
+
+        // ==========================================
+        // DELETE SCHEME
+        // ==========================================
+        public IActionResult DeleteScheme(int id)
+        {
+            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            var scheme = _context.InsuranceSchemes.Find(id);
+            if (scheme != null)
+            {
+                _context.InsuranceSchemes.Remove(scheme);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("ManageSchemes");
+        }
+
+        // ==========================================
+        // VIEW APPLICATIONS & APPROVAL
+        // ==========================================
         public IActionResult ViewApplications()
         {
             if (!IsAdmin()) return RedirectToAction("Login", "Account");
@@ -47,7 +114,6 @@ namespace InsuranceServices.Controllers
             return View(applications);
         }
 
-        // --- NEW: APPROVE A POLICY ---
         [HttpPost]
         public IActionResult ApprovePolicy(int id)
         {
@@ -61,14 +127,45 @@ namespace InsuranceServices.Controllers
             }
             return RedirectToAction("ViewApplications");
         }
+
+        // ==========================================
+        // VIEW POLICY HOLDERS
+        // ==========================================
         public IActionResult ViewPolicyHolders()
         {
-            if (HttpContext.Session.GetString("UserRole") != "Admin") return RedirectToAction("Login", "Account");
+            if (!IsAdmin()) return RedirectToAction("Login", "Account");
 
-            // Get all users who have the role of "PolicyHolder"
             var users = _context.Users.Where(u => u.Role == "PolicyHolder").ToList();
             return View(users);
         }
-        // Keep your existing Create, Edit, and Delete actions below...
+        // GET: Admin/ViewLoans
+        public IActionResult ViewLoans()
+        {
+            if (HttpContext.Session.GetString("UserRole") != "Admin") return RedirectToAction("Login", "Account");
+
+            var loans = _context.LoanRequests
+                .Include(l => l.UserPolicy)
+                .ThenInclude(p => p.User)
+                .Include(l => l.UserPolicy.InsuranceScheme)
+                .OrderByDescending(l => l.RequestDate)
+                .ToList();
+
+            return View(loans);
+        }
+
+        // POST: Admin/ProcessLoan
+        [HttpPost]
+        public IActionResult ProcessLoan(int id, string decision)
+        {
+            if (HttpContext.Session.GetString("UserRole") != "Admin") return RedirectToAction("Login", "Account");
+
+            var loan = _context.LoanRequests.Find(id);
+            if (loan != null)
+            {
+                loan.Status = (decision == "Approve") ? "Approved" : "Rejected";
+                _context.SaveChanges();
+            }
+            return RedirectToAction("ViewLoans");
+        }
     }
 }

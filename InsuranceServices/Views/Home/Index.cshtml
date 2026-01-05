@@ -2,61 +2,146 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="p-5 mb-4 bg-primary text-white rounded-3 shadow">
-    <div class="container-fluid py-5 text-center">
-        <h1 class="display-4 fw-bold">Secure Your Future Today</h1>
-        <p class="fs-4">Reliable insurance plans for your Life, Health, Vehicle, and Home.</p>
-        <div class="mt-4">
-            <a asp-controller="Account" asp-action="Register" class="btn btn-warning btn-lg px-4 fw-bold">Get Started</a>
-            <a href="#services" class="btn btn-outline-light btn-lg px-4 ms-2">View Schemes</a>
+<style>
+    /* Hero Section with subtle overlay */
+    .hero-section {
+        background: linear-gradient(rgba(0, 51, 102, 0.8), rgba(0, 51, 102, 0.8)), url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=1470');
+        background-size: cover;
+        background-position: center;
+        padding: 100px 0;
+        border-radius: 20px;
+        color: white;
+        margin-bottom: 50px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        padding: 40px;
+    }
+
+    /* Feature Cards */
+    .feature-card {
+        background: white;
+        border: none;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        height: 100%;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+    .icon-box {
+        width: 60px;
+        height: 60px;
+        background: var(--primary-blue);
+        color: white;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-blue);
+    }
+
+    .btn-hero {
+        padding: 12px 30px;
+        font-weight: 600;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+    }
+</style>
+
+<div class="container">
+    <div class="hero-section text-center">
+        <div class="row justify-content-center">
+            <div class="col-md-8 px-4">
+                <div class="glass-card">
+                    <h1 class="display-4 fw-bold mb-3">Future-Proof Your Life</h1>
+                    <p class="lead mb-4">Secure your family's future with InsurePro's smart, automated insurance solutions. Managed by experts, powered by you.</p>
+
+                    @if (Context.Session.GetInt32("UserId") == null)
+                    {
+                        <div class="d-flex justify-content-center gap-3">
+                            <a asp-controller="Account" asp-action="Register" class="btn btn-warning btn-hero text-dark">Get Started Now</a>
+                            <a asp-controller="Policy" asp-action="BrowseSchemes" class="btn btn-outline-light btn-hero">View Plans</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="d-flex justify-content-center gap-3">
+                            <a asp-controller="Policy" asp-action="MyPolicies" class="btn btn-warning btn-hero text-dark">Access My Dashboard</a>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="services" class="container py-5">
-    <div class="text-center mb-5">
-        <h2 class="fw-bold text-primary">Our Insurance Services</h2>
-        <p class="text-muted">Comprehensive coverage tailored to your needs</p>
+    <div class="row text-center mb-5">
+        <div class="col-md-3">
+            <div class="stat-number">99%</div>
+            <p class="text-muted">Claim Settlement</p>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-number">24/7</div>
+            <p class="text-muted">Digital Support</p>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-number">15+</div>
+            <p class="text-muted">Custom Plans</p>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-number">0%</div>
+            <p class="text-muted">Hidden Charges</p>
+        </div>
     </div>
 
-    <div class="row g-4 text-center">
+    <h2 class="text-center fw-bold mb-5">Our Protection Verticals</h2>
+    <div class="row g-4">
         <div class="col-md-3">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <i class="bi bi-heart-pulse-fill text-danger fs-1 mb-3"></i>
-                    <h5 class="card-title fw-bold">Life Insurance</h5>
-                    <p class="card-text small text-muted">Financial protection for your family in any mishap.</p>
-                </div>
+            <div class="card feature-card p-4 text-center">
+                <div class="icon-box mx-auto"><i class="bi bi-heart-pulse"></i></div>
+                <h5 class="fw-bold">Health Care</h5>
+                <p class="small text-muted">Comprehensive medical coverage for you and your loved ones.</p>
+                <a asp-controller="Policy" asp-action="BrowseSchemes" class="btn btn-link text-decoration-none text-primary fw-bold p-0">Learn More &rarr;</a>
             </div>
         </div>
-
         <div class="col-md-3">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <i class="bi bi-hospital-fill text-primary fs-1 mb-3"></i>
-                    <h5 class="card-title fw-bold">Medical Insurance</h5>
-                    <p class="card-text small text-muted">Coverage for hospital fees, doctor visits, and medicines.</p>
-                </div>
+            <div class="card feature-card p-4 text-center">
+                <div class="icon-box mx-auto" style="background-color: #ff9900;"><i class="bi bi-car-front"></i></div>
+                <h5 class="fw-bold">Auto Protect</h5>
+                <p class="small text-muted">On-road assistance and complete motor vehicle safety.</p>
+                <a asp-controller="Policy" asp-action="BrowseSchemes" class="btn btn-link text-decoration-none text-primary fw-bold p-0">Learn More &rarr;</a>
             </div>
         </div>
-
         <div class="col-md-3">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <i class="bi bi-car-front-fill text-success fs-1 mb-3"></i>
-                    <h5 class="card-title fw-bold">Motor Insurance</h5>
-                    <p class="card-text small text-muted">Complete protection for your automobiles.</p>
-                </div>
+            <div class="card feature-card p-4 text-center">
+                <div class="icon-box mx-auto" style="background-color: #28a745;"><i class="bi bi-house-door"></i></div>
+                <h5 class="fw-bold">Home Secure</h5>
+                <p class="small text-muted">Protecting your biggest asset against natural and man-made risks.</p>
+                <a asp-controller="Policy" asp-action="BrowseSchemes" class="btn btn-link text-decoration-none text-primary fw-bold p-0">Learn More &rarr;</a>
             </div>
         </div>
-
         <div class="col-md-3">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <i class="bi bi-house-heart-fill text-warning fs-1 mb-3"></i>
-                    <h5 class="card-title fw-bold">Home Insurance</h5>
-                    <p class="card-text small text-muted">Safety for your home against accidents or damage.</p>
-                </div>
+            <div class="card feature-card p-4 text-center">
+                <div class="icon-box mx-auto" style="background-color: #dc3545;"><i class="bi bi-briefcase"></i></div>
+                <h5 class="fw-bold">Life Asset</h5>
+                <p class="small text-muted">Ensuring financial stability for your family, forever.</p>
+                <a asp-controller="Policy" asp-action="BrowseSchemes" class="btn btn-link text-decoration-none text-primary fw-bold p-0">Learn More &rarr;</a>
             </div>
         </div>
     </div>

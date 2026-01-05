@@ -3,169 +3,222 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Insurance Services</title>
+    <title>@ViewData["Title"] - InsurePro</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <style>
         :root {
-            --primary-blue: #004488;
-            --secondary-green: #28a745;
-            --light-bg: #f8f9fa;
+            --primary-blue: #003366;
+            --accent-orange: #ff9900;
+            --transition: all 0.3s ease;
         }
 
         body {
             font-family: 'Open Sans', sans-serif;
-            background-color: var(--light-bg);
+            background-color: #f4f7f9;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
 
-        h1, h2, h3, .navbar-brand {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-        }
-
-        /* Navbar Styling */
         .navbar {
             background-color: var(--primary-blue) !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0.7rem 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
 
-        .navbar-brand, .nav-link {
-            color: white !important;
+        /* Active State UI */
+        .nav-link {
+            font-weight: 600;
+            color: rgba(255,255,255,0.7) !important;
+            position: relative;
+            transition: var(--transition);
+            font-size: 0.95rem;
         }
 
-            .nav-link:hover {
-                color: #ff9900 !important; /* Accent color on hover */
+            .nav-link:hover, .nav-link.active {
+                color: var(--accent-orange) !important;
             }
 
-        .btn-primary {
-            background-color: var(--primary-blue);
-            border: none;
+                .nav-link.active::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -5px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 15px;
+                    height: 3px;
+                    background: var(--accent-orange);
+                    border-radius: 5px;
+                }
+
+        .center-nav {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
         }
 
-        /* Footer Styling */
+        #backToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: none;
+            z-index: 1000;
+            border-radius: 10px;
+        }
+
         footer {
+            background: #111;
+            color: #bbb;
+            padding: 3rem 0;
             margin-top: auto;
-            background-color: #212529;
-            color: white;
-            padding: 2rem 0;
         }
 
-        .main-container {
-            flex: 1;
-            padding-top: 2rem;
-            padding-bottom: 2rem;
+        @@media (max-width: 1200px) {
+            .center-nav {
+                position: static;
+                transform: none;
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
 <body>
+    @{
+        var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+        var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
+    }
+
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <i class="bi bi-shield-check"></i> InsuranceServices
+        <nav class="navbar navbar-expand-xl navbar-dark sticky-top">
+            <div class="container position-relative">
+                @* LEFT: Brand *@
+                <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-shield-lock-fill text-warning me-2 fs-3"></i>
+                    <span>INSURE<span class="text-warning">PRO</span></span>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="mainNav">
+                    @* CENTERED: All Main & User Links *@
+                    <ul class="navbar-nav center-nav">
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link @(currentController == "Home" && currentAction == "Index" ? "active" : "")" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Policy" asp-action="BrowseSchemes">View Plans</a>
+                            <a class="nav-link @(currentController == "Policy" && currentAction == "BrowseSchemes" ? "active" : "")" asp-controller="Policy" asp-action="BrowseSchemes">Plans</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController == "Home" && currentAction == "Strategies" ? "active" : "")" asp-controller="Home" asp-action="Strategies">Strategies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController == "Home" && currentAction == "Privacy" ? "active" : "")" asp-controller="Home" asp-action="Privacy">Privacy</a>
 
-                        @if (Context.Session.GetInt32("UserId") != null)
+                        @* FULL USER-ONLY LINKS (HIDDEN FROM ADMIN) *@
+                        @if (Context.Session.GetInt32("UserId") != null && Context.Session.GetString("UserRole") != "Admin")
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-info" asp-controller="Policy" asp-action="MyPolicies">My Policies</a>
+                                <a class="nav-link @(currentAction == "MyPolicies" ? "active" : "")" asp-controller="Policy" asp-action="MyPolicies">My Policies</a>
                             </li>
-                        }
-                        @if (Context.Session.GetString("UserRole") == "Admin")
-                        {
                             <li class="nav-item">
-                                <a class="nav-link fw-bold text-warning" asp-controller="Admin" asp-action="Dashboard">
-                                    <i class="bi bi-gear-fill"></i> ADMIN PANEL
-                                </a>
+                                <a class="nav-link @(currentAction == "PaymentHistory" ? "active" : "")" asp-controller="Policy" asp-action="PaymentHistory">History</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentAction == "Payment" ? "active" : "")" asp-controller="Policy" asp-action="Payment">Pay Premium</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentAction == "LoanRequest" ? "active" : "")" asp-controller="Policy" asp-action="LoanRequest">Loans</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentAction == "Calculator" ? "active" : "")" asp-controller="Policy" asp-action="Calculator">Calculator</a>
                             </li>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Strategies">Strategies</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Policy" asp-action="Calculator">Calculator</a>
-                        </li>
                     </ul>
 
-                    <ul class="navbar-nav">
+                    @* RIGHT: Admin & Account *@
+                    <div class="d-flex align-items-center ms-auto">
+                        @if (Context.Session.GetString("UserRole") == "Admin")
+                        {
+                            <a class="btn btn-danger btn-sm me-3 fw-bold" asp-controller="Admin" asp-action="Dashboard">
+                                <i class="bi bi-cpu"></i> ADMIN
+                            </a>
+                        }
+
                         @if (Context.Session.GetString("UserName") != null)
                         {
-                            <li class="nav-item">
-                                <span class="nav-link text-white">Welcome, @Context.Session.GetString("UserName")!</span>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link btn btn-danger ms-2" asp-controller="Account" asp-action="Logout">Logout</a>
-                            </li>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-light btn-sm dropdown-toggle rounded-pill px-3" type="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-person-circle"></i> @Context.Session.GetString("UserName")
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                                    <li><a class="dropdown-item text-danger fw-bold" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                                </ul>
+                            </div>
                         }
                         else
                         {
-                            <li class="nav-item">
-                                <a class="nav-link btn btn-outline-light ms-lg-2 px-3" asp-controller="Account" asp-action="Login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link btn btn-warning text-dark ms-lg-2 px-3" asp-controller="Account" asp-action="Register">Join Now</a>
-                            </li>
+                            <a class="btn btn-link text-white text-decoration-none me-2 fw-bold" asp-controller="Account" asp-action="Login">Sign In</a>
+                            <a class="btn btn-warning btn-sm rounded-pill px-4 fw-bold shadow" asp-controller="Account" asp-action="Register">Join</a>
                         }
-                    </ul>
-
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container main-container">
-        <main role="main" class="pb-3">
+    <div class="container main-container py-5">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top text-muted">
-        <div class="container text-center">
-            <div class="row">
-                <div class="col-md-4 text-start text-white">
-                    <h5>Insurance Services</h5>
-                    <p><small>Securing your future with Life, Medical, Motor, and Home protection.</small></p>
+    <button id="backToTop" class="btn btn-warning shadow-lg">
+        <i class="bi bi-chevron-up fs-4"></i>
+    </button>
+
+    <footer>
+        <div class="container">
+            <div class="row g-5 text-center text-md-start">
+                <div class="col-md-4">
+                    <h5 class="text-white fw-bold mb-4">InsurePro Platform</h5>
+                    <p class="small opacity-75">Secure, Automated, Reliable. Your 15-page complete insurance solution.</p>
                 </div>
-                <div class="col-md-4 text-white">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white-50 text-decoration-none text-small">Privacy Policy</a></li>
-                        <li><a href="#" class="text-white-50 text-decoration-none">Terms of Service</a></li>
+                <div class="col-md-4 text-center">
+                    <h5 class="text-white fw-bold mb-4">Quick Links</h5>
+                    <ul class="list-unstyled small">
+                        <li><a class="text-white-50 text-decoration-none" asp-controller="Policy" asp-action="Feedback">Submit Feedback</a></li>
                     </ul>
                 </div>
-                <div class="col-md-4 text-end text-white">
-                    <h5>Contact</h5>
-                    <p><small>support@insuranceservices.com</small></p>
+                <div class="col-md-4 text-center text-md-end">
+                    <h5 class="text-white fw-bold mb-4">Administrator</h5>
+                    <p class="small text-white-50">sys-admin@insurepro.com</p>
                 </div>
             </div>
-            <hr class="bg-light" />
-            <p class="mb-0">&copy; @DateTime.Now.Year - InsuranceServices - <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-white-50">Privacy</a></p>
+            <hr class="my-4 opacity-25">
+            <p class="text-center small opacity-50">&copy; @DateTime.Now.Year - InsurePro Digital Platform.</p>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 300) { $('#backToTop').fadeIn(); }
+            else { $('#backToTop').fadeOut(); }
+        });
+        $('#backToTop').click(function() {
+            $('html, body').animate({scrollTop: 0}, 500);
+            return false;
+        });
+    </script>
 </body>
 </html>
